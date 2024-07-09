@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bigmall.hermit.mmg.mapper.PmsBrandMapper"><!--命名空间,全限定名-->
+    <!--BaseResultMap包含了PmsBrand对象的所有基本属性映射，而ResultMapWithBLOBs则扩展了BaseResultMap，并且添加了brand_story这一字段的映射为brandStory，BaseResultMap表示一个基础或者通用的结果映射配置，包含了数据表中的所有基本字段到Java对象属性的映射-->
+    <resultMap id="BaseResultMap" type="com.bigmall.hermit.mmg.model.PmsBrand">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="first_letter" jdbcType="VARCHAR" property="firstLetter" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="factory_status" jdbcType="INTEGER" property="factoryStatus" />
+        <result column="show_status" jdbcType="INTEGER" property="showStatus" />
+        <result column="product_count" jdbcType="INTEGER" property="productCount" />
+        <result column="product_comment_count" jdbcType="INTEGER" property="productCommentCount" />
+        <result column="logo" jdbcType="VARCHAR" property="logo" />
+        <result column="big_pic" jdbcType="VARCHAR" property="bigPic" />
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.bigmall.hermit.mmg.model.PmsBrand">
+        <result column="brand_story" jdbcType="LONGVARCHAR" property="brandStory" />
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql><!--这些<sql>元素可以被其他SQL语句引用,提高可维护性，包含通用的SQL片段，条件语句或者列的列表-->
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql><!--#{}用于绑定具体的值到SQL语句中，而${}用于插入动态的SQL条件语句。这种设计确保了安全性的同时也保持了灵活性,#{} (Prepared Statement Parameters)预编译参数，参数是在预编译之后填充的，防止SQL注入，${}语法则会直接将变量名解析并替换成实际的字符串值,意味着如果变量的值包含SQL关键字或特殊字符，可能会导致SQL语法错误或SQL注入-->
+    <sql id="Base_Column_List">
+        id, name, first_letter, sort, factory_status, show_status, product_count, product_comment_count,
+    logo, big_pic
+    </sql><!--基本的表的列名-->
+    <sql id="Blob_Column_List">
+        brand_story
+    </sql><!--拓展出来的表的列名-->
+    <select id="selectByExampleWithBLOBs" parameterType="com.bigmall.hermit.mmg.model.PmsBrandExample" resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from pms_brand
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select><!--这里的id，就和mapper里面的方法命名一样-->
+    <select id="selectByExample" parameterType="com.bigmall.hermit.mmg.PmsBrandExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from pms_brand
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select><!--通过动态SQL构建技术来灵活地生成SQL语句，同时利用预编译参数来提高性能和安全性。-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from pms_brand
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from pms_brand
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.bigmall.hermit.mmg.model.PmsBrandExample">
+        delete from pms_brand
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bigmall.hermit.mmg.model.PmsBrand">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into pms_brand (name, first_letter, sort,
+        factory_status, show_status, product_count,
+        product_comment_count, logo, big_pic,
+        brand_story)
+        values (#{name,jdbcType=VARCHAR}, #{firstLetter,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
+        #{factoryStatus,jdbcType=INTEGER}, #{showStatus,jdbcType=INTEGER}, #{productCount,jdbcType=INTEGER},
+        #{productCommentCount,jdbcType=INTEGER}, #{logo,jdbcType=VARCHAR}, #{bigPic,jdbcType=VARCHAR},
+        #{brandStory,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bigmall.hermit.mmg.model.PmsBrand">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into pms_brand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="firstLetter != null">
+                first_letter,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="factoryStatus != null">
+                factory_status,
+            </if>
+            <if test="showStatus != null">
+                show_status,
+            </if>
+            <if test="productCount != null">
+                product_count,
+            </if>
+            <if test="productCommentCount != null">
+                product_comment_count,
+            </if>
+            <if test="logo != null">
+                logo,
+            </if>
+            <if test="bigPic != null">
+                big_pic,
+            </if>
+            <if test="brandStory != null">
+                brand_story,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLetter != null">
+                #{firstLetter,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="factoryStatus != null">
+                #{factoryStatus,jdbcType=INTEGER},
+            </if>
+            <if test="showStatus != null">
+                #{showStatus,jdbcType=INTEGER},
+            </if>
+            <if test="productCount != null">
+                #{productCount,jdbcType=INTEGER},
+            </if>
+            <if test="productCommentCount != null">
+                #{productCommentCount,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null">
+                #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="bigPic != null">
+                #{bigPic,jdbcType=VARCHAR},
+            </if>
+            <if test="brandStory != null">
+                #{brandStory,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bigmall.hermit.mmg.model.PmsBrandExample" resultType="java.lang.Integer">
+        select count(*) from pms_brand
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select><!--parameterType输入类型,resultType返回类型-->
+    <update id="updateByExampleSelective" parameterType="map">
+        update pms_brand
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.firstLetter != null">
+                first_letter = #{record.firstLetter,jdbcType=VARCHAR},
+            </if>
+            <if test="record.sort != null">
+                sort = #{record.sort,jdbcType=INTEGER},
+            </if>
+            <if test="record.factoryStatus != null">
+                factory_status = #{record.factoryStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.showStatus != null">
+                show_status = #{record.showStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.productCount != null">
+                product_count = #{record.productCount,jdbcType=INTEGER},
+            </if>
+            <if test="record.productCommentCount != null">
+                product_comment_count = #{record.productCommentCount,jdbcType=INTEGER},
+            </if>
+            <if test="record.logo != null">
+                logo = #{record.logo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bigPic != null">
+                big_pic = #{record.bigPic,jdbcType=VARCHAR},
+            </if>
+            <if test="record.brandStory != null">
+                brand_story = #{record.brandStory,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update pms_brand
+        set id = #{record.id,jdbcType=BIGINT},
+        name = #{record.name,jdbcType=VARCHAR},
+        first_letter = #{record.firstLetter,jdbcType=VARCHAR},
+        sort = #{record.sort,jdbcType=INTEGER},
+        factory_status = #{record.factoryStatus,jdbcType=INTEGER},
+        show_status = #{record.showStatus,jdbcType=INTEGER},
+        product_count = #{record.productCount,jdbcType=INTEGER},
+        product_comment_count = #{record.productCommentCount,jdbcType=INTEGER},
+        logo = #{record.logo,jdbcType=VARCHAR},
+        big_pic = #{record.bigPic,jdbcType=VARCHAR},
+        brand_story = #{record.brandStory,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update pms_brand
+        set id = #{record.id,jdbcType=BIGINT},
+        name = #{record.name,jdbcType=VARCHAR},
+        first_letter = #{record.firstLetter,jdbcType=VARCHAR},
+        sort = #{record.sort,jdbcType=INTEGER},
+        factory_status = #{record.factoryStatus,jdbcType=INTEGER},
+        show_status = #{record.showStatus,jdbcType=INTEGER},
+        product_count = #{record.productCount,jdbcType=INTEGER},
+        product_comment_count = #{record.productCommentCount,jdbcType=INTEGER},
+        logo = #{record.logo,jdbcType=VARCHAR},
+        big_pic = #{record.bigPic,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update><!--这里的map类型应该是java.util.Map,其中,parameterType属性用于指定执行SQL语句时参数的类型,即传递给SQL语句的参数是一个Map对象,可以键值对的形式传递多个参数给SQL语句-->
+    <update id="updateByPrimaryKeySelective" parameterType="com.bigmall.hermit.mmg.model.PmsBrand">
+        update pms_brand
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLetter != null">
+                first_letter = #{firstLetter,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="factoryStatus != null">
+                factory_status = #{factoryStatus,jdbcType=INTEGER},
+            </if>
+            <if test="showStatus != null">
+                show_status = #{showStatus,jdbcType=INTEGER},
+            </if>
+            <if test="productCount != null">
+                product_count = #{productCount,jdbcType=INTEGER},
+            </if>
+            <if test="productCommentCount != null">
+                product_comment_count = #{productCommentCount,jdbcType=INTEGER},
+            </if>
+            <if test="logo != null">
+                logo = #{logo,jdbcType=VARCHAR},
+            </if>
+            <if test="bigPic != null">
+                big_pic = #{bigPic,jdbcType=VARCHAR},
+            </if>
+            <if test="brandStory != null">
+                brand_story = #{brandStory,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.bigmall.hermit.mmg.model.PmsBrand">
+        update pms_brand
+        set name = #{name,jdbcType=VARCHAR},
+            first_letter = #{firstLetter,jdbcType=VARCHAR},
+            sort = #{sort,jdbcType=INTEGER},
+            factory_status = #{factoryStatus,jdbcType=INTEGER},
+            show_status = #{showStatus,jdbcType=INTEGER},
+            product_count = #{productCount,jdbcType=INTEGER},
+            product_comment_count = #{productCommentCount,jdbcType=INTEGER},
+            logo = #{logo,jdbcType=VARCHAR},
+            big_pic = #{bigPic,jdbcType=VARCHAR},
+            brand_story = #{brandStory,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bigmall.hermit.mmg.model.PmsBrand">
+        update pms_brand
+        set name = #{name,jdbcType=VARCHAR},
+            first_letter = #{firstLetter,jdbcType=VARCHAR},
+            sort = #{sort,jdbcType=INTEGER},
+            factory_status = #{factoryStatus,jdbcType=INTEGER},
+            show_status = #{showStatus,jdbcType=INTEGER},
+            product_count = #{productCount,jdbcType=INTEGER},
+            product_comment_count = #{productCommentCount,jdbcType=INTEGER},
+            logo = #{logo,jdbcType=VARCHAR},
+            big_pic = #{bigPic,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
