@@ -19,7 +19,7 @@
         <!-- 为生成的Java模型创建一个toString方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <!--可以自定义生成model的代码注释-->
-        <commentGenerator type="com.macro.mall.tiny.mbg.CommentGenerator">
+        <commentGenerator type="com.bigmall.hermit.mmg.CommentGenerator">
             <!-- 是否阻止生成的注释 -->
             <property name="suppressAllComments" value="true"/>
             <!-- 是否阻止生成的注释包含时间戳 -->
@@ -27,7 +27,7 @@
             <!-- 是否添加数据库表的备注信息 -->
             <property name="addRemarkComments" value="true"/>
         </commentGenerator>
-        <!-- 配置MBG要连接的数据库信息 -->
+        <!-- 配置MMG要连接的数据库信息 -->
         <jdbcConnection driverClass="${jdbc.driverClass}"
                         connectionURL="${jdbc.connectionURL}"
                         userId="${jdbc.userId}"
@@ -36,12 +36,12 @@
             <property name="nullCatalogMeansCurrent" value="true" />
         </jdbcConnection>
         <!-- 用于控制实体类的生成 -->
-        <javaModelGenerator targetPackage="com.macro.mall.tiny.mbg.model" targetProject="mall-tiny-redis\src\main\java"/>
+        <javaModelGenerator targetPackage="com.bigmall.hermit.mmg.model" targetProject="bigMall\src\main\java"/>
         <!-- 用于控制Mapper.xml文件的生成 -->
-        <sqlMapGenerator targetPackage="com.macro.mall.tiny.mbg.mapper" targetProject="mall-tiny-redis\src\main\resources"/>
+        <sqlMapGenerator targetPackage="com.bigmall.hermit.mmg.mapper" targetProject="bigMall\src\main\resources"/>
         <!-- 用于控制Mapper接口的生成 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.macro.mall.tiny.mbg.mapper"
-                             targetProject="mall-tiny-redis\src\main\java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.bigmall.hermit.mmg.mapper"
+                             targetProject="bigMall\src\main\java"/>
         <!--生成全部表tableName设为%-->
         <table tableName="pms_brand">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
